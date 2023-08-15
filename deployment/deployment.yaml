@@ -1,23 +1,50 @@
+#plantpowerjames/dotnet-test:0.0.1
+apiVersion: v1
+kind: Service
+metadata:
+  name: details
+  labels:
+    app: details
+    service: details
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: details
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-details
+  labels:
+    account: details
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dotnet-test
+  name: details-v1
+  labels:
+    app: details
+    version: v1
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: dotnet-test
-  replicas: 2
+      app: details
+      version: v1
   template:
     metadata:
       labels:
-        app: dotnet-test
+        app: details
+        version: v1
     spec:
+      serviceAccountName: bookinfo-details
       containers:
-      - name: dotnet-test
-        image: plantpowerjames/dotnet-test:0.0.1
-        resources:
-          requests:
-            cpu: "100m"
-        imagePullPolicy: IfNotPresent #Always
+      - name: details
+        image: plantpowerjames/dotnet-test:0.0.2
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+        securityContext:
+          runAsUser: 1000
