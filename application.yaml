@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dotnet-test-argo-application
+  namespace: argocd
+spec:
+  project: james-test-project
+
+  source:
+    repoURL: https://github.com/jeastham1993/argo-istio-eks.git
+    targetRevision: HEAD
+    path: dev
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: dotnet-test
+
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+    automated:
+      selfHeal: true
+      prune: true

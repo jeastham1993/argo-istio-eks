@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-test
+spec:
+  selector:
+    matchLabels:
+      app: dotnet-test
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: dotnet-test
+    spec:
+      containers:
+      - name: dotnet-test
+        image: plantpowerjames/dotnet-test:0.0.1
+        resources:
+          requests:
+            cpu: "100m"
+        imagePullPolicy: IfNotPresent #Always
+        ports:
+        - containerPort: 8080
