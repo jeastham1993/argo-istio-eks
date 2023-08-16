@@ -64,6 +64,6 @@ spec:
         exact: /weatherforecast
     route:
     - destination:
-        host: details.dotnet-test.svc.cluster.local
+        host: details.workload-test.svc.cluster.local
         port:
           number: 8080
