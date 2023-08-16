@@ -62,14 +62,8 @@ spec:
   - match:
     - uri:
         exact: /weatherforecast
-    route:
-    - destination:
-        host: details.workload-test.svc.cluster.local
-        port:
-          number: 8080
-  - match:
     - uri:
-        exact: /health
+        exact: /healthcheck
     route:
     - destination:
         host: details.workload-test.svc.cluster.local
