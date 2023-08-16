@@ -42,7 +42,7 @@ spec:
       serviceAccountName: bookinfo-details
       containers:
       - name: details
-        image: plantpowerjames/dotnet-test:0.0.2
+        image: plantpowerjames/dotnet-test:0.0.3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
