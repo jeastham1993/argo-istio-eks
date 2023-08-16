@@ -19,6 +19,8 @@ metadata:
   name: bookinfo-details
   labels:
     account: details
+annotations:
+  eks.amazonaws.com/role-arn: arn:aws:iam::377288124856:role/application-access-role
 ---
 apiVersion: apps/v1
 kind: Deployment
