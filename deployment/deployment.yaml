@@ -44,7 +44,7 @@ spec:
       serviceAccountName: bookinfo-details
       containers:
       - name: details
-        image: 377288124856.dkr.ecr.eu-west-1.amazonaws.com/application-example:latest
+        image: 377288124856.dkr.ecr.eu-west-1.amazonaws.com/application-example:b19b63258d2126525b25dc9978d5b7753b6b0d93
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
