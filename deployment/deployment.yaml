@@ -19,6 +19,8 @@ metadata:
   name: bookinfo-details
   labels:
     account: details
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::377288124856:role/application-access-role
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -42,7 +44,7 @@ spec:
       serviceAccountName: bookinfo-details
       containers:
       - name: details
-        image: plantpowerjames/dotnet-test:0.0.2
+        image: plantpowerjames/dotnet-test:0.0.7
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -62,6 +64,8 @@ spec:
   - match:
     - uri:
         exact: /weatherforecast
+    - uri:
+        exact: /healthcheck
     route:
     - destination:
         host: details.workload-test.svc.cluster.local
