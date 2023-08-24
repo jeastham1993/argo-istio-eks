@@ -41,15 +41,13 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./src/KubernetesSample/     
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-    - name: Deploy to Kubernetes cluster                                                                            
-      uses: kodermax/kubectl-aws-eks@master                                                                         
-      env:                                                                                                          
-        RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.RELEASE_REVISION }}
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+    - uses: swdotcom/update-and-apply-kubernetes-configs@v1
+      with:
+        k8-config-file-paths: |
+          deployment/deployment.yml
+        replacement-method: defined
+      env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ env.RELEASE_REVISION }}
-      with:                                                                                                         
-        args: apply -f deployment/deployment.yaml
       

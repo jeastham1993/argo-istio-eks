@@ -44,7 +44,7 @@ spec:
       serviceAccountName: bookinfo-details
       containers:
       - name: details
-        image: 377288124856.dkr.ecr.eu-west-1.amazonaws.com/application-example:latest
+        image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
