@@ -44,7 +44,7 @@ spec:
       serviceAccountName: bookinfo-details
       containers:
       - name: details
-        image: plantpowerjames/dotnet-test:0.0.7
+        image: 377288124856.dkr.ecr.eu-west-1.amazonaws.com/application-example:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

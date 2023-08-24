@@ -51,9 +51,5 @@ jobs:
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ env.RELEASE_REVISION }}
       with:                                                                                                         
-        args: set image deployment/details details=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-    - name: Verify Kubernetes deployment                               
-      uses: kodermax/kubectl-aws-eks@master                            
-      with:                                                            
-        args: rollout status deploy my-pod -n $KUBE_NAMESPACE 
+        args: apply -f deployment/deployment.yaml
       
