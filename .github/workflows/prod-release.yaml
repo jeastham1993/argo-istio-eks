@@ -1,4 +1,4 @@
-name: Build & Deploy Dev
+name: Release Production
 
 on:
   workflow_dispatch:
@@ -30,20 +30,6 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         role-to-assume: arn:aws:iam::377288124856:role/kubernetes-deploy-test
 
-    - name: Login to Amazon ECR            
-      id: login-ecr                        
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ env.RELEASE_REVISION }}
-      run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest ./src/KubernetesSample/ 
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-
     - name: Deploy to Kubernetes cluster                                                                            
       uses: kodermax/kubectl-aws-eks@master                                                                         
       env:                                                                                                          
@@ -53,6 +39,6 @@ jobs:
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ env.RELEASE_REVISION }}
       with:                                                                                                         
-        args: apply -k deployment/overlays/dev
+        args: apply -k deployment/overlays/prod
         
       
