@@ -1,4 +1,4 @@
-namespace KubernetesSample;
+namespace DotnetSQLServer.Blueprint;
 
 public class WeatherForecast
 {

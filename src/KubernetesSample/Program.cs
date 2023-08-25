@@ -1,5 +1,12 @@
-using Serilog;
-using Serilog.Formatting.Compact;
+using System.Text.Json;
+
+using Amazon.S3;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
+
+using DotnetSQLServer.Blueprint;
+
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,36 +17,38 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console(new CompactJsonFormatter())
-    .CreateLogger();
+builder.Services.AddSingleton<AmazonS3Client>(new AmazonS3Client());
 
-try
-{
-    builder.Host.UseSerilog();
+var secretsManagerClient = new AmazonSecretsManagerClient();
+var secret = secretsManagerClient.GetSecretValueAsync(
+        new GetSecretValueRequest()
+        {
+            SecretId = builder.Configuration["SecretName"]
+        })
+    .GetAwaiter()
+    .GetResult();
 
-    var app = builder.Build();
+var databaseConnection = JsonSerializer.Deserialize<DatabaseConnection>(secret.SecretString);
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+builder.Services.AddDbContext<BookContext>(
+    options =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+            options.UseMySQL($"server=mysql-aurora-default.c6re1x2hf9zq.eu-west-1.rds.amazonaws.com;uid={databaseConnection.Username};pwd={databaseConnection.Password};database=mysql-aurora-default;Connection Lifetime=900");
+    });
 
-    app.UseHttpsRedirection();
+var app = builder.Build();
 
-    app.UseAuthorization();
-
-    app.MapControllers();
-
-    app.Run();
-}
-catch (Exception e)
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    Log.Fatal(e, "Application terminated unexpectedly");
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-finally
-{
-    Log.CloseAndFlush();
-}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

@@ -20,4 +20,4 @@ EXPOSE 443
     
 WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ["./KubernetesSample", "--urls", "http://0.0.0.0:8080"]
+ENTRYPOINT ["./DotnetSQLServer.Blueprint", "--urls", "http://0.0.0.0:8080"]
