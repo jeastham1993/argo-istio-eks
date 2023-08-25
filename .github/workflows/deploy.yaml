@@ -53,6 +53,6 @@ jobs:
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ env.RELEASE_REVISION }}
       with:                                                                                                         
-        args: apply -k deployment/overlays/dev
+        args: apply -k deployment/overlays/dev -n workload-test
         
       
