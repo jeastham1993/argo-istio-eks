@@ -1,7 +1,10 @@
 name: Build & Deploy Dev
 
-on:
-  workflow_dispatch:
+on: 
+  push:
+    # only trigger on branches, not on tags
+    branches: 'main'
+
 env:
     RELEASE_REVISION: ${{ github.sha }}
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

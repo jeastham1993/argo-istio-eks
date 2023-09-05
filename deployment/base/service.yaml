@@ -5,12 +5,16 @@ metadata:
   labels:
     app: details
     service: details
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
 spec:
   ports:
   - port: 8080
     name: http
   selector:
     app: details
+  type: LoadBalancer
+  loadBalancerClass: service.k8s.aws/nlb
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -20,24 +24,3 @@ metadata:
     account: details
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::377288124856:role/application-access-role
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: details-service
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - default/ingress
-  http:
-  - match:
-    - uri:
-        exact: /weatherforecast
-    - uri:
-        exact: /healthcheck
-    route:
-    - destination:
-        host: details.workload-test.svc.cluster.local
-        port:
-          number: 8080
