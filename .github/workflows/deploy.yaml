@@ -31,7 +31,9 @@ jobs:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}        
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
-        role-to-assume: arn:aws:iam::377288124856:role/kubernetes-deploy-test
+        role-to-assume: kubernetes-deploy-test
+        role-duration-seconds: 1200
+        role-session-name: deployment
 
     - name: Login to Amazon ECR            
       id: login-ecr                        
