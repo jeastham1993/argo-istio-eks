@@ -37,12 +37,12 @@ spec:
           - name: DB_SECRET_USERNAME
             valueFrom:
               secretKeyRef:
-                name: workload-secrets
+                name: workload-secret
                 key: workload-db-username
                 optional: false 
           - name: DB_SECRET_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: workload-secrets
+                name: workload-secret
                 key: workload-db-password
                 optional: false 
