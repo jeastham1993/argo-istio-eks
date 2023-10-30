@@ -46,3 +46,9 @@ spec:
                 name: workload-secret
                 key: workload-db-password
                 optional: false 
+          - name: DB_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: workload-ssm
+                key: cluster-endpoint
+                optional: false 
