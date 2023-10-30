@@ -33,3 +33,16 @@ spec:
         - containerPort: 8080
         securityContext:
           runAsUser: 1000
+        env:
+          - name: DB_SECRET_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: workload-secrets
+                key: workload-db-username
+                optional: false 
+          - name: DB_SECRET_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: workload-secrets
+                key: workload-db-password
+                optional: false 
